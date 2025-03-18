@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import clientPromise from '@/lib/mongodb';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   if (!ObjectId.isValid(params.id)) {
@@ -25,12 +26,17 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
   return {
     title: plant.seoMetadata?.title || plant.name,
-    description: plant.seoMetadata?.description || plant.description.substring(0, 160),
+    description:
+      plant.seoMetadata?.description || plant.description.substring(0, 160),
     keywords: plant.seoMetadata?.keywords || plant.categories,
   };
 }
 
-export default async function PlantPage({ params }: { params: { id: string } }) {
+export default async function PlantPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   if (!ObjectId.isValid(params.id)) {
     notFound();
   }
@@ -70,23 +76,27 @@ export default async function PlantPage({ params }: { params: { id: string } }) 
           {plant.images && plant.images.length > 0 ? (
             <div className="space-y-4">
               <div className="overflow-hidden rounded-lg">
-                <img
+                <Image
                   src={plant.images[0].url}
                   alt={plant.images[0].alt}
                   className="h-auto w-full object-cover"
+                  width={500}
+                  height={500}
                 />
               </div>
               {plant.images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
-                  {plant.images.map((image, index) => (
+                  {plant.images.map((image: any, index: number) => (
                     <div
                       key={image.publicId}
                       className="overflow-hidden rounded-lg border"
                     >
-                      <img
+                      <Image
                         src={image.url}
                         alt={image.alt}
                         className="h-24 w-full object-cover"
+                        width={96}
+                        height={96}
                       />
                     </div>
                   ))}
@@ -109,7 +119,7 @@ export default async function PlantPage({ params }: { params: { id: string } }) 
           )}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            {plant.categories?.map((category) => (
+            {plant.categories?.map((category: string) => (
               <Link key={category} href={`/plants?category=${category}`}>
                 <span className="rounded-full bg-secondary px-3 py-1 text-sm">
                   {category}
@@ -177,4 +187,4 @@ export default async function PlantPage({ params }: { params: { id: string } }) 
       )}
     </div>
   );
-} 
+}

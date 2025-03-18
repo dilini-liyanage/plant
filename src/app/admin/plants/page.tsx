@@ -3,18 +3,19 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import clientPromise from '@/lib/mongodb';
+import Image from 'next/image';
 
 export default async function PlantsPage() {
   const { userId } = await auth();
-  
+
   if (!userId) {
     redirect('/sign-in');
   }
-  
+
   const client = await clientPromise;
   const db = client.db('plant-nursery');
   const plants = await db.collection('plants').find({}).toArray();
-  
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -23,7 +24,7 @@ export default async function PlantsPage() {
           <Button>Add New Plant</Button>
         </Link>
       </div>
-      
+
       <div className="mt-8">
         <div className="overflow-x-auto rounded-lg border">
           <table className="min-w-full divide-y divide-gray-200">
@@ -49,14 +50,18 @@ export default async function PlantsPage() {
                   <td className="whitespace-nowrap px-6 py-4">
                     <div className="flex items-center">
                       {plant.images && plant.images[0] && (
-                        <img
+                        <Image
                           src={plant.images[0].url}
                           alt={plant.images[0].alt}
                           className="mr-4 h-10 w-10 rounded-full object-cover"
+                          width={40}
+                          height={40}
                         />
                       )}
                       <div>
-                        <div className="font-medium text-gray-900">{plant.name}</div>
+                        <div className="font-medium text-gray-900">
+                          {plant.name}
+                        </div>
                         {plant.scientificName && (
                           <div className="text-sm text-gray-500">
                             {plant.scientificName}
@@ -106,7 +111,10 @@ export default async function PlantsPage() {
               ))}
               {plants.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500">
+                  <td
+                    colSpan={4}
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
                     No plants found. Add your first plant!
                   </td>
                 </tr>

@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = auth();
+    const userId = auth();
 
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating plant:', error);
 
-    if (error.name === 'ZodError') {
+    if (error === 'ZodError') {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: 'Validation error', details: error },
         { status: 400 }
       );
     }
