@@ -20,10 +20,6 @@ const navItems = [
     label: 'About',
     href: '/about',
   },
-  {
-    label: 'Contact',
-    href: '/contact',
-  },
 ];
 
 export default function Header() {
@@ -46,9 +42,7 @@ export default function Header() {
                   href={item.href}
                   className={cn(
                     'text-sm font-medium transition-colors hover:text-primary',
-                    pathname === item.href
-                      ? 'text-primary'
-                      : 'text-gray-600'
+                    pathname === item.href ? 'text-primary' : 'text-gray-600'
                   )}
                 >
                   {item.label}
@@ -59,8 +53,8 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:block">
-          <Link href="/admin">
-            <Button variant="outline">Admin</Button>
+          <Link href="/contact">
+            <Button variant="outline">Contact</Button>
           </Link>
         </div>
 
@@ -99,15 +93,15 @@ export default function Header() {
               </Link>
             ))}
             <Link
-              href="/admin"
+              href="/contact"
               className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Admin
+              Contact
             </Link>
           </div>
         </div>
       )}
     </header>
   );
-} 
+}

@@ -9,30 +9,29 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = params.id;
-
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json({ error: 'Invalid plant ID' }, { status: 400 });
+    const { userId } = await auth();
+    if (!userId) {
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const client = await clientPromise;
-    const db = client.db('plant-nursery');
+    const db = client.db('plantDB');
 
     const plant = await db
-      .collection('plants')
-      .findOne({ _id: new ObjectId(id) });
+      .collection('plant')
+      .findOne({ _id: new ObjectId(params.id) });
 
     if (!plant) {
-      return NextResponse.json({ error: 'Plant not found' }, { status: 404 });
+      return new NextResponse('Plant not found', { status: 404 });
     }
 
-    return NextResponse.json(plant);
+    return NextResponse.json({
+      ...plant,
+      _id: plant._id.toString(),
+    });
   } catch (error) {
     console.error('Error fetching plant:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch plant' },
-      { status: 500 }
-    );
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
 
@@ -41,59 +40,56 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const userId = auth();
-
+    const { userId } = await auth();
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const id = params.id;
-
-    if (!ObjectId.isValid(id)) {
-      return NextResponse.json({ error: 'Invalid plant ID' }, { status: 400 });
+      return new NextResponse('Unauthorized', { status: 401 });
     }
 
     const body = await request.json();
+    const { name, description, imageUrl } = body;
 
-    // Validate the request body against our schema
-    const validatedData = PlantSchema.omit({
-      _id: true,
-      createdAt: true,
-      updatedAt: true,
-    }).parse(body);
+    // Validate required fields
+    if (!name || !description || !imageUrl) {
+      return new NextResponse('Missing required fields', { status: 400 });
+    }
 
     const client = await clientPromise;
-    const db = client.db('plant-nursery');
+    const db = client.db('plantDB');
 
-    const now = new Date();
-    const updateData = {
-      ...validatedData,
-      updatedAt: now,
-    };
+    // Check if plant exists and belongs to user
+    const existingPlant = await db
+      .collection('plant')
+      .findOne({ _id: new ObjectId(params.id) });
 
-    const result = await db
-      .collection('plants')
-      .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
-
-    if (result.matchedCount === 0) {
-      return NextResponse.json({ error: 'Plant not found' }, { status: 404 });
+    if (!existingPlant) {
+      return new NextResponse('Plant not found', { status: 404 });
     }
 
-    return NextResponse.json({ id, ...updateData });
+    if (existingPlant.createdBy !== userId) {
+      return new NextResponse('Unauthorized', { status: 403 });
+    }
+
+    // Update plant
+    const result = await db.collection('plant').updateOne(
+      { _id: new ObjectId(params.id) },
+      {
+        $set: {
+          name,
+          description,
+          imageUrl,
+          updatedAt: new Date(),
+        },
+      }
+    );
+
+    if (result.modifiedCount === 0) {
+      return new NextResponse('Failed to update plant', { status: 400 });
+    }
+
+    return NextResponse.json({ message: 'Plant updated successfully' });
   } catch (error) {
     console.error('Error updating plant:', error);
-
-    if (error === 'ZodError') {
-      return NextResponse.json(
-        { error: 'Validation error', details: error },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json(
-      { error: 'Failed to update plant' },
-      { status: 500 }
-    );
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
 
