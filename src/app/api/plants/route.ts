@@ -6,7 +6,7 @@ import { PlantSchema } from '@/types/plant';
 export async function GET(request: NextRequest) {
   try {
     const client = await clientPromise;
-    const db = client.db('plant-nursery');
+    const db = client.db('plantDB');
 
     const searchParams = request.nextUrl.searchParams;
     const featured = searchParams.get('featured');

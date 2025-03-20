@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import clientPromise from '@/lib/mongodb';
 import { Plant } from '@/types/plant';
-import { redirect } from 'next/navigation';
+import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
@@ -10,7 +10,7 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db('plantDB');
 
-    // Get all plants
+    // Otherwise, return all plants (existing functionality)
     const plants = await db
       .collection('plant')
       .find({})

@@ -4,36 +4,36 @@ import { ObjectId } from 'mongodb';
 import clientPromise from '@/lib/mongodb';
 import { PlantSchema } from '@/types/plant';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const { userId } = await auth();
-    if (!userId) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
+// export async function GET(
+//   request: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const { userId } = await auth();
+//     if (!userId) {
+//       return new NextResponse('Unauthorized', { status: 401 });
+//     }
 
-    const client = await clientPromise;
-    const db = client.db('plantDB');
+//     const client = await clientPromise;
+//     const db = client.db('plantDB');
 
-    const plant = await db
-      .collection('plant')
-      .findOne({ _id: new ObjectId(params.id) });
+//     const plant = await db
+//       .collection('plant')
+//       .findOne({ _id: new ObjectId(params.id) });
 
-    if (!plant) {
-      return new NextResponse('Plant not found', { status: 404 });
-    }
+//     if (!plant) {
+//       return new NextResponse('Plant not found', { status: 404 });
+//     }
 
-    return NextResponse.json({
-      ...plant,
-      _id: plant._id.toString(),
-    });
-  } catch (error) {
-    console.error('Error fetching plant:', error);
-    return new NextResponse('Internal Server Error', { status: 500 });
-  }
-}
+//     return NextResponse.json({
+//       ...plant,
+//       _id: plant._id.toString(),
+//     });
+//   } catch (error) {
+//     console.error('Error fetching plant:', error);
+//     return new NextResponse('Internal Server Error', { status: 500 });
+//   }
+// }
 
 export async function PUT(
   request: NextRequest,

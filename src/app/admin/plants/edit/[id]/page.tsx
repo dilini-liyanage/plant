@@ -29,7 +29,7 @@ export default function EditPlant({ params }: { params: { id: string } }) {
   useEffect(() => {
     const fetchPlant = async () => {
       try {
-        const response = await fetch(`/api/plants/${params.id}`);
+        const response = await fetch(`/api/plants/getPlant?id=${params.id}`);
         if (!response.ok) throw new Error('Failed to fetch plant');
         const plant = await response.json();
 
