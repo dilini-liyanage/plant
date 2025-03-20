@@ -8,6 +8,7 @@ interface Plant {
   _id: string;
   name: string;
   description: string;
+  imageUrl: string;
   createdAt: string;
 }
 
@@ -47,8 +48,8 @@ export default async function AdminDashboard() {
   const { totalPlants, plants } = await getPlantStats();
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="rounded-lg border bg-white p-6 shadow-sm">
@@ -80,19 +81,28 @@ export default async function AdminDashboard() {
 
       <div className="mt-8">
         <h2 className="mb-4 text-xl font-semibold">Recent Plants</h2>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {plants.slice(0, 6).map((plant) => (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {plants.slice(0, 4).map((plant) => (
             <div
               key={plant._id}
               className="rounded-lg border bg-white p-4 shadow-sm"
             >
+              <div className="relative h-48 w-full bg-gray-50">
+                <Image
+                  src={plant.imageUrl}
+                  alt={plant.name}
+                  fill
+                  className="object-contain p-4"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                />
+              </div>
               <h3 className="font-medium">{plant.name}</h3>
               <p className="mt-1 text-sm text-gray-600">
                 {plant.description.substring(0, 100)}
                 {plant.description.length > 100 ? '...' : ''}
               </p>
-              <div className="mt-4">
-                <Link href={`/admin/plants/${plant._id}`}>
+              <div className="mt-4 flex justify-end">
+                <Link href={`/admin/plants/edit/${plant._id}`}>
                   <Button variant="outline" size="sm">
                     Edit Plant
                   </Button>

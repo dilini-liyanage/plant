@@ -6,6 +6,7 @@ interface Plant {
   description: string;
   imageUrl: string;
   createdAt: string;
+  price?: number;
 }
 
 async function getPlants() {
@@ -39,41 +40,67 @@ export default async function PlantsPage() {
   const plants = await getPlants();
 
   return (
-    <div className="container mx-auto mt-12 p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Our Plants</h1>
-      </div>
-
-      {plants.length === 0 ? (
-        <div className="text-center text-gray-500 mt-8">
-          No plants available at the moment
+    <div className=" bg-LightGreenBG">
+      <div className="container mx-auto py-12">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">Our Plants</h1>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {plants.map((plant) => (
-            <div
-              key={plant._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="p-6">
-                <Image
-                  src={plant.imageUrl}
-                  alt={plant.name}
-                  width={100}
-                  height={100}
-                />
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                  {plant.name}
-                </h2>
-                <p className="text-gray-600">{plant.description}</p>
-                <div className="mt-4 text-sm text-gray-500">
-                  Added on {new Date(plant.createdAt).toLocaleDateString()}
+
+        {plants.length === 0 ? (
+          <div className="text-center text-gray-500 mt-8">
+            No plants available at the moment
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+            {plants.map((plant) => (
+              <div
+                key={plant._id}
+                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+              >
+                {/* Image Container */}
+                <div className="relative h-64 w-full bg-gray-50">
+                  <Image
+                    src={plant.imageUrl}
+                    alt={plant.name}
+                    fill
+                    className="object-contain p-4"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  />
+                </div>
+
+                {/* Content Container */}
+                <div className="p-4 bg-[#3B755F] text-white">
+                  <h2 className="text-lg font-semibold mb-1">{plant.name}</h2>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl font-bold">
+                      ${plant.price || '0.00'}
+                    </span>
+                    <button
+                      className="rounded-full bg-white p-2 hover:bg-gray-100 transition-colors"
+                      aria-label="View details"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="#3B755F"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

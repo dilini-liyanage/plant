@@ -14,6 +14,7 @@ export default function NewPlant() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    price: '',
   });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,6 +127,22 @@ export default function NewPlant() {
             required
             placeholder="Enter plant description"
             rows={4}
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="description"
+            className="mb-2 block text-sm font-medium"
+          >
+            Price
+          </label>
+          <Input
+            id="price"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+            placeholder="Enter plant price"
           />
         </div>
 

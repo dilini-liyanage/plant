@@ -24,6 +24,11 @@ const config = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        PrimaryText: '#0b333e',
+        SecondaryText: '#38594a',
+        SecondaryBG: '#d6dbc9',
+        LightGreenBG: '#c5d7cc',
+        DarkGreenBG: '#447d61',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',

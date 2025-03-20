@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     // Get request body
     const body = await request.json();
-    const { name, description, imageUrl } = body;
+    const { name, description, imageUrl, price } = body;
 
     // Validate required fields
     if (!name || !description || !imageUrl) {
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       name,
       description,
       imageUrl,
+      price,
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: userId,

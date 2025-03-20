@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { UserButton } from '@clerk/nextjs';
 import { Home, Leaf, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const navItems = [
   {
@@ -28,11 +29,16 @@ export default function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-16 items-center border-b bg-white px-4">
+    <div className="flex h-16 items-center border-b sticky top-0 bg-white px-4">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center">
           <Link href="/admin" className="mr-8 text-xl font-bold">
-            Plant Nursery
+            <Image
+              src="/logo.jpg"
+              alt="Plant Nursery"
+              width={100}
+              height={100}
+            />
           </Link>
           <nav className="hidden md:block">
             <ul className="flex space-x-4">
@@ -42,7 +48,8 @@ export default function AdminNav() {
                     href={item.href}
                     className={cn(
                       'flex items-center rounded-md px-3 py-2 text-sm font-medium',
-                      pathname === item.href || pathname?.startsWith(`${item.href}/`)
+                      pathname === item.href ||
+                        pathname?.startsWith(`${item.href}/`)
                         ? 'bg-primary text-primary-foreground'
                         : 'text-gray-700 hover:bg-gray-100'
                     )}
@@ -56,7 +63,11 @@ export default function AdminNav() {
           </nav>
         </div>
         <div className="flex items-center space-x-4">
-          <Link href="/" target="_blank" className="text-sm text-gray-600 hover:text-gray-900">
+          <Link
+            href="/"
+            target="_blank"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
             View Website
           </Link>
           <UserButton afterSignOutUrl="/" />
@@ -64,4 +75,4 @@ export default function AdminNav() {
       </div>
     </div>
   );
-} 
+}

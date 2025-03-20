@@ -22,6 +22,7 @@ export default function EditPlant({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    price: '',
   });
 
   // Fetch existing plant data
@@ -35,6 +36,7 @@ export default function EditPlant({ params }: { params: { id: string } }) {
         setFormData({
           name: plant.name,
           description: plant.description,
+          price: plant.price,
         });
         setImageUrl(plant.imageUrl);
       } catch (error) {
@@ -98,6 +100,7 @@ export default function EditPlant({ params }: { params: { id: string } }) {
           id: params.id,
           name: formData.name,
           description: formData.description,
+          price: formData.price,
           imageUrl: imageUrl,
         }),
       });
@@ -150,6 +153,18 @@ export default function EditPlant({ params }: { params: { id: string } }) {
           />
         </div>
 
+        <div>
+          <label htmlFor="price" className="mb-2 block text-sm font-medium">
+            Price
+          </label>
+          <Input
+            id="price"
+            value={formData.price}
+            onChange={(e) =>
+              setFormData({ ...formData, price: e.target.value })
+            }
+          />
+        </div>
         <div className="space-y-4">
           <span className="mb-2 block text-sm font-medium">Plant Image</span>
 

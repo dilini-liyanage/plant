@@ -26,7 +26,7 @@ export default function Home() {
               <Link href="/plants">
                 <Button
                   size="lg"
-                  className="bg-SecondaryText text-white hover:bg-SecondaryText/80"
+                  className="bg-DarkGreenBG text-white hover:bg-SecondaryText/80"
                 >
                   Browse Our Collection
                 </Button>
@@ -45,7 +45,7 @@ export default function Home() {
 
         {/* Featured plants section will go here */}
       </main>
-      <footer className="bg-SecondaryBG p-4">
+      <footer className="bg-LightGreenBG p-4">
         <div className="container mx-auto text-center">
           <p>
             © {new Date().getFullYear()} Plant Nursery. All rights reserved.

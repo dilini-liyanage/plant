@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 const navItems = [
   {
@@ -30,7 +31,7 @@ export default function Header() {
     <header className="border-b bg-transparent sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-SecondaryText">
-          Plant Nursery
+          <Image src="/logo.jpg" alt="Plant Nursery" width={100} height={100} />
         </Link>
 
         {/* Desktop Navigation */}
@@ -41,9 +42,9 @@ export default function Header() {
                 <Link
                   href={item.href}
                   className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary',
+                    'text-sm font-medium transition-colors hover:text-primary hover:underline',
                     pathname === item.href
-                      ? 'text-SecondaryText'
+                      ? 'text-SecondaryText underline '
                       : 'text-PrimaryText'
                   )}
                 >
@@ -56,7 +57,7 @@ export default function Header() {
 
         <Link
           href="/contact"
-          className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:text-SecondaryText bg-SecondaryBG "
+          className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:text-SecondaryText bg-LightGreenBG "
           onClick={() => setMobileMenuOpen(false)}
         >
           Contact

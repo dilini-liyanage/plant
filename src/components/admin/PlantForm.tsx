@@ -15,17 +15,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 import ImageUpload from './ImageUpload';
 import dynamic from 'next/dynamic';
 
@@ -100,10 +95,10 @@ export default function PlantForm({
   const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
-      
+
       if (isEditing && initialData) {
         // Update existing plant
-        await fetch(`/api/plants/${initialData._id}`, {
+        await fetch(`/api/plants/edit/${initialData._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -120,7 +115,7 @@ export default function PlantForm({
           body: JSON.stringify(data),
         });
       }
-      
+
       router.push('/admin/plants');
       router.refresh();
     } catch (error) {
@@ -152,7 +147,7 @@ export default function PlantForm({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="scientificName"
@@ -166,7 +161,7 @@ export default function PlantForm({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="categories"
@@ -189,11 +184,17 @@ export default function PlantForm({
                                   <Checkbox
                                     checked={field.value?.includes(category)}
                                     onCheckedChange={(checked) => {
-                                      const currentCategories = field.value || [];
+                                      const currentCategories =
+                                        field.value || [];
                                       return checked
-                                        ? field.onChange([...currentCategories, category])
+                                        ? field.onChange([
+                                            ...currentCategories,
+                                            category,
+                                          ])
                                         : field.onChange(
-                                            currentCategories.filter((c) => c !== category)
+                                            currentCategories.filter(
+                                              (c) => c !== category
+                                            )
                                           );
                                     }}
                                   />
@@ -211,7 +212,7 @@ export default function PlantForm({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="featured"
@@ -229,7 +230,7 @@ export default function PlantForm({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="price"
@@ -237,9 +238,9 @@ export default function PlantForm({
                   <FormItem>
                     <FormLabel>Price (optional)</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="number" 
-                        step="0.01" 
+                      <Input
+                        type="number"
+                        step="0.01"
                         placeholder="0.00"
                         {...field}
                         value={field.value || ''}
@@ -250,7 +251,7 @@ export default function PlantForm({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="stock"
@@ -258,8 +259,8 @@ export default function PlantForm({
                   <FormItem>
                     <FormLabel>Stock (optional)</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="number" 
+                      <Input
+                        type="number"
                         placeholder="0"
                         {...field}
                         value={field.value || ''}
@@ -272,7 +273,7 @@ export default function PlantForm({
               />
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Images</CardTitle>
@@ -296,12 +297,17 @@ export default function PlantForm({
                     <FormMessage />
                     {field.value && field.value.length > 0 && (
                       <div className="mt-4">
-                        <h4 className="text-sm font-medium mb-2">Uploaded Images:</h4>
+                        <h4 className="text-sm font-medium mb-2">
+                          Uploaded Images:
+                        </h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {field.value.map((image, index) => (
-                            <div key={index} className="relative aspect-square rounded-md overflow-hidden border">
+                            <div
+                              key={index}
+                              className="relative aspect-square rounded-md overflow-hidden border"
+                            >
                               <Image
-                                src={image.url} 
+                                src={image.url}
                                 alt={`Uploaded image ${index + 1}`}
                                 className="object-cover w-full h-full"
                                 width={100}
@@ -331,7 +337,7 @@ export default function PlantForm({
             </CardContent>
           </Card>
         </div>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Description</CardTitle>
@@ -358,7 +364,7 @@ export default function PlantForm({
             />
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Care Instructions</CardTitle>
@@ -385,7 +391,7 @@ export default function PlantForm({
             />
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader>
             <CardTitle>SEO Metadata (Optional)</CardTitle>
@@ -404,7 +410,7 @@ export default function PlantForm({
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="seoMetadata.description"
@@ -412,18 +418,18 @@ export default function PlantForm({
                 <FormItem>
                   <FormLabel>SEO Description</FormLabel>
                   <FormControl>
-                    <Textarea 
-                      placeholder="SEO description" 
-                      className="resize-none" 
+                    <Textarea
+                      placeholder="SEO description"
+                      className="resize-none"
                       rows={3}
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="seoMetadata.keywords"
@@ -431,7 +437,7 @@ export default function PlantForm({
                 <FormItem>
                   <FormLabel>SEO Keywords (comma separated)</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       placeholder="e.g. indoor, tropical, easy care"
                       value={field.value?.join(', ') || ''}
                       onChange={(e) => {
@@ -449,7 +455,7 @@ export default function PlantForm({
             />
           </CardContent>
         </Card>
-        
+
         <div className="flex justify-end space-x-4">
           <Button
             type="button"
@@ -460,10 +466,14 @@ export default function PlantForm({
             Cancel
           </Button>
           <Button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : isEditing ? 'Update Plant' : 'Create Plant'}
+            {loading
+              ? 'Saving...'
+              : isEditing
+                ? 'Update Plant'
+                : 'Create Plant'}
           </Button>
         </div>
       </form>
     </Form>
   );
-} 
+}
