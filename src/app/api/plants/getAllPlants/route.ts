@@ -6,11 +6,6 @@ import { redirect } from 'next/navigation';
 
 export async function GET() {
   try {
-    // const { userId } = await auth();
-    // // Check authentication
-    // if (!userId) {
-    //     redirect('/sign-in');
-    //   }
     // Connect to MongoDB
     const client = await clientPromise;
     const db = client.db('plantDB');

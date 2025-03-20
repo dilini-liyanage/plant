@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-3xl font-bold text-SecondaryText">Dashboard</h1>
 
       <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="rounded-lg border bg-white p-6 shadow-sm">
@@ -68,10 +68,12 @@ export default async function AdminDashboard() {
           <h2 className="text-lg font-medium text-gray-500">Quick Actions</h2>
           <div className="mt-4 flex flex-col gap-4">
             <Link href="/admin/plants/new">
-              <Button className="w-full">Add New Plant</Button>
+              <Button className="w-full bg-DarkGreenBG hover:bg-DarkGreenBG/80 text-white">
+                Add New Plant
+              </Button>
             </Link>
             <Link href="/" target="_blank">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full ">
                 View Website
               </Button>
             </Link>

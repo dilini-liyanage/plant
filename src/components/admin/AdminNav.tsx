@@ -48,9 +48,8 @@ export default function AdminNav() {
                     href={item.href}
                     className={cn(
                       'flex items-center rounded-md px-3 py-2 text-sm font-medium',
-                      pathname === item.href ||
-                        pathname?.startsWith(`${item.href}/`)
-                        ? 'bg-primary text-primary-foreground'
+                      pathname === item.href
+                        ? 'bg-DarkGreenBG text-primary-foreground'
                         : 'text-gray-700 hover:bg-gray-100'
                     )}
                   >

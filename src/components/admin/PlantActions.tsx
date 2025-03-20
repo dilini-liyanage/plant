@@ -38,6 +38,14 @@ export function PlantActions({ plantId }: PlantActionsProps) {
   return (
     <div className="flex gap-2">
       <Button
+        onClick={() => router.push(`/admin/plants/view/${plantId}`)}
+        variant="outline"
+        size="sm"
+        className="bg-LightGreenBG hover:bg-LightGreenBG/80 text-black"
+      >
+        View
+      </Button>
+      <Button
         onClick={() => router.push(`/admin/plants/edit/${plantId}`)}
         variant="outline"
         size="sm"
