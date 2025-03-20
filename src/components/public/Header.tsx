@@ -27,9 +27,9 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="border-b bg-white">
+    <header className="border-b bg-transparent sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold">
+        <Link href="/" className="text-xl font-bold text-SecondaryText">
           Plant Nursery
         </Link>
 
@@ -42,7 +42,9 @@ export default function Header() {
                   href={item.href}
                   className={cn(
                     'text-sm font-medium transition-colors hover:text-primary',
-                    pathname === item.href ? 'text-primary' : 'text-gray-600'
+                    pathname === item.href
+                      ? 'text-SecondaryText'
+                      : 'text-PrimaryText'
                   )}
                 >
                   {item.label}
@@ -52,11 +54,13 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="hidden md:block">
-          <Link href="/contact">
-            <Button variant="outline">Contact</Button>
-          </Link>
-        </div>
+        <Link
+          href="/contact"
+          className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:text-SecondaryText bg-SecondaryBG "
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          Contact
+        </Link>
 
         {/* Mobile Menu Button */}
         <button
@@ -94,7 +98,7 @@ export default function Header() {
             ))}
             <Link
               href="/contact"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50"
+              className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-SecondaryText"
               onClick={() => setMobileMenuOpen(false)}
             >
               Contact
