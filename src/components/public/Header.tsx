@@ -28,7 +28,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="border-b bg-transparent sticky top-0 z-50">
+    <header className="border-b bg-white sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-SecondaryText">
           <Image src="/logo.jpg" alt="Plant Nursery" width={100} height={100} />

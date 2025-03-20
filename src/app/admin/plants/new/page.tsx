@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
+import { X } from 'lucide-react';
 
 export default function NewPlant() {
   const router = useRouter();
@@ -16,6 +17,19 @@ export default function NewPlant() {
     description: '',
     price: '',
   });
+  const [careGuides, setCareGuides] = useState<string[]>([]);
+  const [newCareGuide, setNewCareGuide] = useState('');
+
+  const addCareGuide = () => {
+    if (newCareGuide.trim()) {
+      setCareGuides([...careGuides, newCareGuide.trim()]);
+      setNewCareGuide('');
+    }
+  };
+
+  const removeCareGuide = (index: number) => {
+    setCareGuides(careGuides.filter((_, i) => i !== index));
+  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -69,7 +83,9 @@ export default function NewPlant() {
         },
         body: JSON.stringify({
           ...formData,
+          price: parseFloat(formData.price) || 0,
           imageUrl,
+          careGuides,
         }),
       });
 
@@ -169,6 +185,53 @@ export default function NewPlant() {
               />
             </div>
           )}
+        </div>
+
+        {/* Care Guides Section */}
+        <div className="space-y-2">
+          <label htmlFor="careGuide" className="mb-2 block text-sm font-medium">
+            Care Guides
+          </label>
+          <div className="flex gap-2">
+            <Input
+              id="careGuide"
+              value={newCareGuide}
+              onChange={(e) => setNewCareGuide(e.target.value)}
+              placeholder="Add a care guide point"
+              className="flex-1"
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addCareGuide();
+                }
+              }}
+            />
+            <Button type="button" onClick={addCareGuide} variant="secondary">
+              Add
+            </Button>
+          </div>
+
+          {/* Care Guides List */}
+          <div className="mt-2 space-y-2" aria-label="Care guides list">
+            {careGuides.map((guide, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 rounded-md bg-gray-50 p-2"
+              >
+                <span className="flex-1">{guide}</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeCareGuide(index)}
+                  className="h-8 w-8 p-0"
+                  aria-label={`Remove care guide: ${guide}`}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
         </div>
 
         <Button type="submit" disabled={loading || !imageUrl}>

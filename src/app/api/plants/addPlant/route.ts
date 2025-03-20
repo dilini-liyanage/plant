@@ -11,11 +11,16 @@ export async function POST(request: Request) {
 
     // Get request body
     const body = await request.json();
-    const { name, description, imageUrl, price } = body;
+    const { name, description, imageUrl, price, careGuides } = body;
 
     // Validate required fields
     if (!name || !description || !imageUrl) {
       return new NextResponse('Missing required fields', { status: 400 });
+    }
+
+    // Validate careGuides is an array if provided
+    if (careGuides && !Array.isArray(careGuides)) {
+      return new NextResponse('Care guides must be an array', { status: 400 });
     }
 
     // Connect to MongoDB
@@ -28,6 +33,7 @@ export async function POST(request: Request) {
       description,
       imageUrl,
       price,
+      careGuides: careGuides || [], // Default to empty array if not provided
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: userId,
