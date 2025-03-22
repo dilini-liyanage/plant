@@ -34,7 +34,7 @@ export default function Home() {
             </div>
             <div className="w-full md:w-1/2 flex justify-center items-center">
               <Image
-                src="/plant-hp.png"
+                src="/plant-hp2.png"
                 alt="Plant Nursery"
                 width={500}
                 height={500}
