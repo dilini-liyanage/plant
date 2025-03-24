@@ -120,103 +120,108 @@ export default function EditPlant({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="mx-auto max-w-2xl p-6">
+    <div className="container mx-auto p-6">
       <h1 className="mb-6 text-2xl font-bold">Edit Plant</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Plant Name
-          </label>
-          <Input
-            id="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-        </div>
+        <div className="flex w-full gap-10">
+          <div className="space-y-4">
+            {/* <span className="mb-2 block text-sm font-medium">Plant Image</span> */}
 
-        <div>
-          <label
-            htmlFor="description"
-            className="mb-2 block text-sm font-medium"
-          >
-            Description
-          </label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) =>
-              setFormData({ ...formData, description: e.target.value })
-            }
-            required
-            rows={4}
-          />
-        </div>
+            {/* Current Image Display */}
+            <div className="relative">
+              {imageUrl && (
+                <div className="relative aspect-square w-64 overflow-hidden rounded-lg border">
+                  <Image
+                    src={imageUrl}
+                    alt="Current plant image"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority
+                  />
+                </div>
+              )}
 
-        <div>
-          <label htmlFor="price" className="mb-2 block text-sm font-medium">
-            Price
-          </label>
-          <Input
-            id="price"
-            value={formData.price}
-            onChange={(e) =>
-              setFormData({ ...formData, price: e.target.value })
-            }
-          />
-        </div>
-        <div className="space-y-4">
-          <span className="mb-2 block text-sm font-medium">Plant Image</span>
-
-          {/* Current Image Display */}
-          <div className="relative">
-            {imageUrl && (
-              <div className="relative aspect-square w-64 overflow-hidden rounded-lg border">
-                <Image
-                  src={imageUrl}
-                  alt="Current plant image"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  priority
-                />
+              {/* Upload Button Overlay */}
+              <div className="mt-4">
+                <label
+                  htmlFor="image-upload"
+                  className="inline-flex cursor-pointer items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                >
+                  {loading ? 'Uploading...' : 'Change Image'}
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={loading}
+                    className="hidden"
+                  />
+                </label>
+                <p className="mt-2 text-sm text-gray-500">
+                  Click to upload a new image
+                </p>
               </div>
-            )}
-
-            {/* Upload Button Overlay */}
-            <div className="mt-4">
-              <label
-                htmlFor="image-upload"
-                className="inline-flex cursor-pointer items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm border border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              >
-                {loading ? 'Uploading...' : 'Change Image'}
-                <input
-                  id="image-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  disabled={loading}
-                  className="hidden"
-                />
-              </label>
-              <p className="mt-2 text-sm text-gray-500">
-                Click to upload a new image
-              </p>
             </div>
           </div>
-        </div>
+          <div className="w-full flex flex-col gap-4">
+            <div>
+              <label htmlFor="name" className="mb-2 block text-sm font-medium">
+                Plant Name
+              </label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                required
+              />
+            </div>
 
-        <div className="flex gap-4 mt-6">
-          <Button type="submit" disabled={loading || !imageUrl}>
-            {loading ? 'Updating Plant...' : 'Update Plant'}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => router.push('/admin/plants')}
-          >
-            Cancel
-          </Button>
+            <div>
+              <label
+                htmlFor="description"
+                className="mb-2 block text-sm font-medium"
+              >
+                Description
+              </label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                required
+                rows={4}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="price" className="mb-2 block text-sm font-medium">
+                Price
+              </label>
+              <Input
+                id="price"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex gap-4 justify-end mt-6">
+              <Button type="submit" disabled={loading || !imageUrl}>
+                {loading ? 'Updating Plant...' : 'Update Plant'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push('/admin/plants')}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         </div>
       </form>
     </div>

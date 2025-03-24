@@ -85,6 +85,7 @@ export async function GET() {
     const transformedCategories = categories.map((category) => ({
       ...category,
       _id: category._id.toString(),
+      name: category.name,
       createdAt: category.createdAt.toISOString(),
       updatedAt: category.updatedAt.toISOString(),
     }));

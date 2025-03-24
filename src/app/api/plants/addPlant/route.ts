@@ -11,17 +11,17 @@ export async function POST(request: Request) {
 
     // Get request body
     const body = await request.json();
-    const { name, description, imageUrl, price, careGuides } = body;
+    const { name, description, imageUrl, price, careGuides, categories } = body;
 
     // Validate required fields
-    if (!name || !description || !imageUrl) {
+    if (!name || !description || !imageUrl || !categories) {
       return new NextResponse('Missing required fields', { status: 400 });
     }
 
-    // Validate careGuides is an array if provided
-    if (careGuides && !Array.isArray(careGuides)) {
-      return new NextResponse('Care guides must be an array', { status: 400 });
-    }
+    // Validate categories is an array
+    // if (!Array.isArray(categories) || categories.length === 0) {
+    //   return new NextResponse('At least one category is required', { status: 400 });
+    // }
 
     // Connect to MongoDB
     const client = await clientPromise;
@@ -33,7 +33,8 @@ export async function POST(request: Request) {
       description,
       imageUrl,
       price,
-      careGuides: careGuides || [], // Default to empty array if not provided
+      categories, // Add categories field
+      careGuides: careGuides || [],
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: userId,

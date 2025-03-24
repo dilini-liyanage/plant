@@ -87,7 +87,7 @@ export default async function AdminDashboard() {
           {plants.slice(0, 4).map((plant) => (
             <div
               key={plant._id}
-              className="rounded-lg border bg-white p-4 shadow-sm"
+              className="rounded-lg border bg-white p-4 shadow-sm flex flex-col h-full"
             >
               <div className="relative h-48 w-full bg-gray-50">
                 <Image
@@ -98,12 +98,12 @@ export default async function AdminDashboard() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 />
               </div>
-              <h3 className="font-medium">{plant.name}</h3>
+              <h3 className="font-medium mt-2">{plant.name}</h3>
               <p className="mt-1 text-sm text-gray-600">
                 {plant.description.substring(0, 100)}
                 {plant.description.length > 100 ? '...' : ''}
               </p>
-              <div className="mt-4 flex justify-end">
+              <div className="flex justify-end mt-auto pt-4">
                 <Link href={`/admin/plants/edit/${plant._id}`}>
                   <Button variant="outline" size="sm">
                     Edit Plant

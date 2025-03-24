@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,18 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { PLANT_CATEGORIES } from '@/types/plant';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+interface Category {
+  _id: string;
+  name: string;
+}
 
 export default function NewPlant() {
   const router = useRouter();
@@ -33,8 +45,36 @@ export default function NewPlant() {
   });
   const [careGuides, setCareGuides] = useState<string[]>([]);
   const [newCareGuide, setNewCareGuide] = useState('');
+  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+
+  const handleCategorySelect = (value: string) => {
+    setSelectedCategories((current) => {
+      if (current.includes(value)) {
+        return current.filter((name) => name !== value);
+      }
+      return [...current, value];
+    });
+  };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/settings/addCategory');
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        setCategories(data || []);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        setCategories([]);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const addCareGuide = () => {
     if (newCareGuide.trim()) {
@@ -132,6 +172,9 @@ export default function NewPlant() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    console.log(categories);
+  }, [categories]);
   return (
     <div className="mx-auto max-w-2xl p-6">
       <h1 className="mb-6 text-2xl font-bold">Add New Plant</h1>
@@ -270,6 +313,44 @@ export default function NewPlant() {
           >
             Categories
           </label>
+          <Select onValueChange={handleCategorySelect}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <SelectItem key={category._id} value={category.name}>
+                    {category.name}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value="none" disabled>
+                  No categories available
+                </SelectItem>
+              )}
+            </SelectContent>
+          </Select>
+
+          {selectedCategories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedCategories.map((categoryName) => (
+                <div
+                  key={categoryName}
+                  className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm text-green-800"
+                >
+                  {categoryName}
+                  <button
+                    type="button"
+                    onClick={() => handleCategorySelect(categoryName)}
+                    className="ml-1 text-green-600 hover:text-green-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <Button type="submit" disabled={loading || !imageUrl}>
