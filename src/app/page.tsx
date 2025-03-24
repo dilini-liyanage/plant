@@ -1,3 +1,4 @@
+import Footer from '@/components/public/Footer';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,7 +11,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-1/2 flex flex-col justify-center items-start">
               <h2 className="text-3xl text-PrimaryText font-bold mb-4">
-                Let’s Bring
+                Let&apos;s Bring
               </h2>
               <h2 className="text-6xl text-PrimaryText font-bold mb-4 text-left">
                 A New <span className="text-SecondaryText">Green Friend </span>{' '}
@@ -42,16 +43,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Featured plants section will go here */}
       </main>
-      <footer className="bg-LightGreenBG p-4">
-        <div className="container mx-auto text-center">
-          <p>
-            © {new Date().getFullYear()} Plant Nursery. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

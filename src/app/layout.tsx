@@ -6,6 +6,7 @@ import Header from '@/components/public/Header';
 import './globals.css';
 import { auth } from '@clerk/nextjs/server';
 import AdminNav from '@/components/admin/AdminNav';
+import Footer from '@/components/public/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
           <div className="bg-[#f2f2f2]">
             {userId ? <AdminNav /> : <Header />}
             {children}
+            <Footer />
           </div>
         </body>
       </html>

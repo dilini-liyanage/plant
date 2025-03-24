@@ -6,7 +6,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Image from 'next/image';
-import { X } from 'lucide-react';
+import { X, Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { PLANT_CATEGORIES } from '@/types/plant';
 
 export default function NewPlant() {
   const router = useRouter();
@@ -19,6 +33,8 @@ export default function NewPlant() {
   });
   const [careGuides, setCareGuides] = useState<string[]>([]);
   const [newCareGuide, setNewCareGuide] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
 
   const addCareGuide = () => {
     if (newCareGuide.trim()) {
@@ -73,6 +89,11 @@ export default function NewPlant() {
       return;
     }
 
+    if (selectedCategories.length === 0) {
+      alert('Please select at least one category');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -86,6 +107,7 @@ export default function NewPlant() {
           price: parseFloat(formData.price) || 0,
           imageUrl,
           careGuides,
+          categories: selectedCategories,
         }),
       });
 
@@ -115,11 +137,11 @@ export default function NewPlant() {
       <h1 className="mb-6 text-2xl font-bold">Add New Plant</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
+          <label htmlFor="plantName" className="mb-2 block text-sm font-medium">
             Plant Name
           </label>
           <Input
-            id="name"
+            id="plantName"
             name="name"
             value={formData.name}
             onChange={handleChange}
@@ -130,13 +152,13 @@ export default function NewPlant() {
 
         <div>
           <label
-            htmlFor="description"
+            htmlFor="plantDescription"
             className="mb-2 block text-sm font-medium"
           >
             Description
           </label>
           <Textarea
-            id="description"
+            id="plantDescription"
             name="description"
             value={formData.description}
             onChange={handleChange}
@@ -145,16 +167,19 @@ export default function NewPlant() {
             rows={4}
           />
         </div>
+
         <div>
           <label
-            htmlFor="description"
+            htmlFor="plantPrice"
             className="mb-2 block text-sm font-medium"
           >
             Price
           </label>
           <Input
-            id="price"
+            id="plantPrice"
             name="price"
+            type="number"
+            step="0.01"
             value={formData.price}
             onChange={handleChange}
             required
@@ -163,11 +188,14 @@ export default function NewPlant() {
         </div>
 
         <div>
-          <label htmlFor="image" className="mb-2 block text-sm font-medium">
+          <label
+            htmlFor="plantImage"
+            className="mb-2 block text-sm font-medium"
+          >
             Plant Image
           </label>
           <Input
-            id="image"
+            id="plantImage"
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
@@ -187,14 +215,16 @@ export default function NewPlant() {
           )}
         </div>
 
-        {/* Care Guides Section */}
         <div className="space-y-2">
-          <label htmlFor="careGuide" className="mb-2 block text-sm font-medium">
+          <label
+            htmlFor="careGuideInput"
+            className="mb-2 block text-sm font-medium"
+          >
             Care Guides
           </label>
           <div className="flex gap-2">
             <Input
-              id="careGuide"
+              id="careGuideInput"
               value={newCareGuide}
               onChange={(e) => setNewCareGuide(e.target.value)}
               placeholder="Add a care guide point"
@@ -211,8 +241,7 @@ export default function NewPlant() {
             </Button>
           </div>
 
-          {/* Care Guides List */}
-          <div className="mt-2 space-y-2" aria-label="Care guides list">
+          <div className="mt-2 space-y-2">
             {careGuides.map((guide, index) => (
               <div
                 key={index}
@@ -232,6 +261,83 @@ export default function NewPlant() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="space-y-4">
+          <label
+            htmlFor="categories"
+            className="mb-2 block text-sm font-medium"
+          >
+            Categories
+          </label>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                id="categories"
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-full justify-between"
+              >
+                {selectedCategories.length > 0
+                  ? `${selectedCategories.length} categories selected`
+                  : 'Select categories...'}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0">
+              <Command>
+                <CommandInput placeholder="Search categories..." />
+                <CommandEmpty>No category found.</CommandEmpty>
+                <CommandGroup>
+                  {PLANT_CATEGORIES.map((category) => (
+                    <CommandItem
+                      key={category}
+                      onSelect={() => {
+                        setSelectedCategories((prev) =>
+                          prev.includes(category)
+                            ? prev.filter((c) => c !== category)
+                            : [...prev, category]
+                        );
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          'mr-2 h-4 w-4',
+                          selectedCategories.includes(category)
+                            ? 'opacity-100'
+                            : 'opacity-0'
+                        )}
+                      />
+                      {category}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          {selectedCategories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {selectedCategories.map((category) => (
+                <div
+                  key={category}
+                  className="flex items-center gap-1 rounded-full bg-green-100 px-3 py-1 text-sm text-green-800"
+                >
+                  {category}
+                  <button
+                    onClick={() =>
+                      setSelectedCategories((prev) =>
+                        prev.filter((c) => c !== category)
+                      )
+                    }
+                    className="ml-1 text-green-600 hover:text-green-800"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <Button type="submit" disabled={loading || !imageUrl}>
