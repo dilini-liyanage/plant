@@ -30,4 +30,31 @@ export const PlantSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type Plant = z.infer<typeof PlantSchema>;
+// export type Plant = z.infer<typeof PlantSchema>;
+
+// First, create a types file to define the categories
+export const PLANT_CATEGORIES = [
+  'Indoor Plants',
+  'Outdoor Plants',
+  'Succulents',
+  'Flowering Plants',
+  'Air Purifying Plants',
+  'Low Light Plants',
+  'Pet Friendly Plants',
+  'Large Plants',
+] as const;
+
+export type PlantCategory = (typeof PLANT_CATEGORIES)[number];
+
+export interface Plant {
+  _id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  categories: PlantCategory[];
+  careGuides: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+}

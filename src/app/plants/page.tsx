@@ -40,7 +40,18 @@ export default async function PlantsPage() {
   const plants = await getPlants();
 
   return (
-    <div className=" bg-LightGreenBG">
+    <div className=" bg-none">
+      <div className="bg-LightGreenBG py-24">
+        <div className="text-center">
+          <h1 className="mb-4 text-4xl font-bold text-PrimaryText">
+            Our Plants
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-gray-600">
+            Welcome to our plant nursery! We offer a wide range of plants for
+            you to choose from.
+          </p>
+        </div>
+      </div>
       <div className="container mx-auto py-12">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Our Plants</h1>
@@ -51,7 +62,7 @@ export default async function PlantsPage() {
             No plants available at the moment
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
             {plants.map((plant) => (
               <div
                 key={plant._id}
@@ -69,10 +80,10 @@ export default async function PlantsPage() {
                 </div>
 
                 {/* Content Container */}
-                <div className="p-4 bg-[#3B755F] text-white">
-                  <h2 className="text-lg font-semibold mb-1">{plant.name}</h2>
+                <div className="py-2 px-4 bg-[#3B755F] text-white">
+                  <h2 className="text-lg font-semibold mb-0">{plant.name}</h2>
                   <div className="flex items-center justify-between">
-                    <span className="text-xl font-bold">
+                    <span className="text-lg font-medium text-gray-300">
                       ${plant.price || '0.00'}
                     </span>
                     <button
