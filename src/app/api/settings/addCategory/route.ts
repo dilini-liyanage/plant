@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     const client = await clientPromise;
     const db = client.db('plantDB');
-    const categoriesCollection = db.collection<Category>('categories');
+    const categoriesCollection = db.collection<Category>('category');
 
     const existingCategory = await categoriesCollection.findOne({
       name: { $regex: new RegExp(`^${name}$`, 'i') },

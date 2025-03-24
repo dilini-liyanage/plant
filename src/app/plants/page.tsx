@@ -1,4 +1,8 @@
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import PlantViewButton from '@/components/PlantViewButton';
 
 interface Plant {
   _id: string;
@@ -86,25 +90,7 @@ export default async function PlantsPage() {
                     <span className="text-lg font-medium text-gray-300">
                       ${plant.price || '0.00'}
                     </span>
-                    <button
-                      className="rounded-full bg-white p-2 hover:bg-gray-100 transition-colors"
-                      aria-label="View details"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="#3B755F"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                      </svg>
-                    </button>
+                    <PlantViewButton plantId={plant._id} />
                   </div>
                 </div>
               </div>
