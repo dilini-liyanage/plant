@@ -16,9 +16,7 @@ interface Plant {
 async function getPlants() {
   try {
     // Get the base URL based on the environment
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     // Add cache and revalidate options
     const response = await fetch(`${baseUrl}/api/plants/getAllPlants`, {

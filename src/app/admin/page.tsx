@@ -14,22 +14,26 @@ interface Plant {
 
 async function getPlantStats() {
   try {
-    const response = await fetch(`/api/plants/getAllPlants`);
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`${baseUrl}/api/plants/getAllPlants`, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (!response.ok) {
       throw new Error('Failed to fetch plant stats');
     }
 
     const data = await response.json();
-    return {
-      totalPlants: data.totalPlants,
-      plants: data.plants as Plant[],
-    };
+    return data;
   } catch (error) {
     console.error('Error fetching plant stats:', error);
     return {
       totalPlants: 0,
-      plants: [] as Plant[],
+      plants: [],
     };
   }
 }
@@ -80,7 +84,7 @@ export default async function AdminDashboard() {
       <div className="mt-8">
         <h2 className="mb-4 text-xl font-semibold">Recent Plants</h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {plants.slice(0, 4).map((plant) => (
+          {plants.slice(0, 4).map((plant: Plant) => (
             <div
               key={plant._id}
               className="rounded-lg border bg-white p-4 shadow-sm flex flex-col h-full"

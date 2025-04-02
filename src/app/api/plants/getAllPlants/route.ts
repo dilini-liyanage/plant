@@ -4,7 +4,7 @@ import clientPromise from '@/lib/mongodb';
 import { Plant } from '@/types/plant';
 import { ObjectId } from 'mongodb';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     // Connect to MongoDB
     const client = await clientPromise;
@@ -17,6 +17,7 @@ export async function GET() {
       .sort({ createdAt: -1 })
       .toArray();
     const totalPlants = await db.collection('plant').countDocuments();
+    console.log(plants);
 
     // Transform MongoDB ObjectIds to strings
     const transformedPlants = plants.map((plant) => ({

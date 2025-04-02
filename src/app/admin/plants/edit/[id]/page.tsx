@@ -89,8 +89,7 @@ export default function EditPlant({ params }: { params: { id: string } }) {
 
     setLoading(true);
     try {
-      const baseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const response = await fetch(`${baseUrl}/api/plants/updatePlant`, {
         method: 'PUT',
         headers: {

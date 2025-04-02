@@ -11,19 +11,9 @@ interface Plant {
   createdAt: string;
 }
 
-async function handleDelete(id: string) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-  const response = await fetch(`${baseUrl}/api/plants/deletePlant`, {
-    method: 'DELETE',
-    body: JSON.stringify({ id }),
-  });
-}
-
 async function getPlants() {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const response = await fetch(`${baseUrl}/api/plants/getAllPlants`, {
       method: 'GET',
       cache: 'no-store',
