@@ -14,11 +14,7 @@ interface Plant {
 
 async function getPlantStats() {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/plants/getAllPlants`, {
-      method: 'GET',
-    });
+    const response = await fetch(`/api/plants/getAllPlants`);
 
     if (!response.ok) {
       throw new Error('Failed to fetch plant stats');
