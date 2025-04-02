@@ -15,18 +15,32 @@ interface Plant {
 
 async function getPlants() {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+    // Get the base URL based on the environment
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+
+    // Add cache and revalidate options
     const response = await fetch(`${baseUrl}/api/plants/getAllPlants`, {
       method: 'GET',
       cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch plants');
+      throw new Error(`Failed to fetch plants: ${response.statusText}`);
     }
 
     const data = await response.json();
+
+    // Add error logging to help debug
+    if (!data.plants || !Array.isArray(data.plants)) {
+      console.error('Invalid data format:', data);
+      return [];
+    }
+
     return data.plants as Plant[];
   } catch (error) {
     console.error('Error fetching plants:', error);
@@ -35,12 +49,6 @@ async function getPlants() {
 }
 
 export default async function PlantsPage() {
-  // const { userId } = await auth();
-
-  // if (!userId) {
-  //   redirect('/sign-in');
-  // }
-
   const plants = await getPlants();
 
   return (
